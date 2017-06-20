@@ -102,8 +102,31 @@ public abstract class JSTableModel<T> extends DefaultTableModel {
 	/**
 	 * 初始化数据的操作
 	 * @return 0无数据 -1出错 成功返回行数
+	 * @exception Exception
 	 */
-	public abstract int onRetrieve();
+	public abstract int onRetrieve() throws Exception;
+	
+	/**
+	 * 删除时候执行的操作
+	 * @return
+	 * @exception Exception
+	 */
+	public abstract boolean onDelete(int moduleRow) throws Exception;
+	
+	/**
+	 * 插入的时候执行的操作
+	 * @param moduleRow
+	 * @return
+	 * @exception Exception
+	 */
+	public abstract boolean onInsert(int moduleRow) throws Exception;
+	
+	/**
+	 * 当执行追加的时候执行的操作
+	 * @return
+	 * @exception Exception
+	 */
+	public abstract boolean onAppend() throws Exception;
 	
 	/**
 	 * 获取列列表
@@ -358,6 +381,7 @@ public abstract class JSTableModel<T> extends DefaultTableModel {
 		int iResult = onRetrieve();
 
 		event.setCancel(false);
+		event.setRow(iResult);
 		event.setResult(iResult >= 0);
 		this.getTableModelLinster().afterRetrieve(event);
 
@@ -382,7 +406,7 @@ public abstract class JSTableModel<T> extends DefaultTableModel {
 		if (event.isCancel() || !event.getResult())
 			return false;
 
-		if (!this.getTableModelLinster().delete(event))
+		if (!this.onDelete(modelRow))
 			return false;
 
 		event.setCancel(false);
@@ -407,7 +431,7 @@ public abstract class JSTableModel<T> extends DefaultTableModel {
 		if (event.isCancel() || !event.getResult())
 			return false;
 
-		if (!this.getTableModelLinster().append(event))
+		if (!this.onAppend())
 			return false;
 
 		event.setCancel(false);
@@ -435,7 +459,7 @@ public abstract class JSTableModel<T> extends DefaultTableModel {
 		if (event.isCancel() || !event.getResult())
 			return false;
 
-		if (!this.getTableModelLinster().insert(event))
+		if (!this.onInsert(modelRow))
 			return false;
 
 		event.setCancel(false);

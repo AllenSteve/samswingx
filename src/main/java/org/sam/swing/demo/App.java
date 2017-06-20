@@ -20,7 +20,7 @@ public class App
 		}
     	
     	JFrameDefaultTableDemo frm = new JFrameDefaultTableDemo();
-    	frm.setSize(640 , 480);
+    	frm.setSize(1024 , 768);
     	frm.setLocationRelativeTo(null); //在屏幕上居中
         frm.setVisible(true);
     }

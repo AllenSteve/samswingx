@@ -221,11 +221,11 @@ public class JSTable extends JXTable implements KeyListener {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)this.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(JLabel.CENTER);
 
-//		if (this.getModel() instanceof JSTableModel) {
-//			JSTableModel<?> module = (JSTableModel<?>) this.getModel();
-//			if (module != null)
-//				module.setEditable(false);
-//		}
+		if (this.getModel() instanceof JSTableModel) {
+			JSTableModel<?> module = (JSTableModel<?>) this.getModel();
+			if (module != null)
+				module.setEditable(false);
+		}
 	}
 
 	/**

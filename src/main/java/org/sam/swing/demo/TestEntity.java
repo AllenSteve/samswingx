@@ -25,6 +25,11 @@ public class TestEntity {
 	private String name;
 	
 	/**
+	 * 性别
+	 */
+	private String gender;
+	
+	/**
 	 * 生日
 	 */
 	private Date birthday;
@@ -161,6 +166,22 @@ public class TestEntity {
 
 	public void setAge(Integer age) {
 		this.age = age;
+	}
+	 
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String toString()
+	{
+		return "id=" + id + " code=" + code + " name=" + name;
 	}
 	
 }

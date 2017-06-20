@@ -78,15 +78,6 @@ public interface JSTableModelLinster<E> extends EventListener {
 	public void beforDelete(JSTableModelEvent event) throws Exception;
 
 	/**
-	 * 删除的时候执行的操作
-	 * 
-	 * @param event
-	 * @return true成功 false失败
-	 * @throws Exception
-	 */
-	public boolean delete(JSTableModelEvent event) throws Exception;
-
-	/**
 	 * 删除成功后执行的操作
 	 * 
 	 * @param event
@@ -107,15 +98,6 @@ public interface JSTableModelLinster<E> extends EventListener {
 	public void beforeAppend(JSTableModelEvent event) throws Exception;
 
 	/**
-	 * 支架数据的时候执行的操作
-	 * 
-	 * @param event
-	 * @return true成功， false失败
-	 * @throws Exception
-	 */
-	public boolean append(JSTableModelEvent event) throws Exception;
-
-	/**
 	 * 插入成功后执行的操作
 	 * 
 	 * @param event
@@ -134,14 +116,6 @@ public interface JSTableModelLinster<E> extends EventListener {
 	 */
 	public void beforeInsert(JSTableModelEvent event) throws Exception;
 
-	/**
-	 * 插入的时候执行的操作
-	 * 
-	 * @param event
-	 * @return true成功 false失败
-	 * @throws Exception
-	 */
-	public boolean insert(JSTableModelEvent event) throws Exception;
 
 	/**
 	 * 插入成功后执行的操作

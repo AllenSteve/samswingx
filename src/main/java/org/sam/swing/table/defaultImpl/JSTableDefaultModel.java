@@ -48,15 +48,16 @@ public class JSTableDefaultModel<E extends Object> extends JSTableModel<List<E>>
 	 * 当前的泛型的类型
 	 */
 	private Class<E> cls;
-	
+
 	/**
 	 * 必须带有实体的构造类型，好变态
+	 * 
 	 * @param cls
 	 */
-	public JSTableDefaultModel(Class<E> cls)
-	{
+	public JSTableDefaultModel(Class<E> cls) {
 		super();
 		this.cls = cls;
+		this.addTableModelListener(this);
 	}
 
 	/**
@@ -248,22 +249,25 @@ public class JSTableDefaultModel<E extends Object> extends JSTableModel<List<E>>
 		JSTableColumn[] cols = getTableColumns();
 
 		// 未找到绑定的实体列
-		int findColumn = this.findColumn(JSTableColumn.COLUMN_ORIGINAL);
-		if (findColumn < 0)
+		int originalCol = this.findColumn(JSTableColumn.COLUMN_ORIGINAL);
+		if (originalCol < 0)
 			throw new Exception("not init the original column");
 
 		// 初始化数据
 		for (int i = 0; i < cols.length; i++) {
 			JSTableColumn column = cols[i];
 			String colName = column.getIdentifier().toString();
-			findColumn = this.findColumn(colName);
+			int findColumn = this.findColumn(colName);
 			if (findColumn < 0)
 				continue;
 
 			// 无数据绑定列
 			if (null == colName || colName.length() <= 0) {
 
-			} else // 有数据绑定列
+			} else if (originalCol == i){
+				datas[originalCol] = entity;
+			}
+			else // 有数据绑定列
 			{
 				Field field = this.getCls().getDeclaredField(colName);
 				if (field == null)
@@ -280,10 +284,7 @@ public class JSTableDefaultModel<E extends Object> extends JSTableModel<List<E>>
 				}
 			}
 		}
-
-		findColumn = this.findColumn(JSTableColumn.COLUMN_ORIGINAL);
-		datas[findColumn] = entity;
-
+		
 		return datas;
 	}
 
@@ -299,7 +300,8 @@ public class JSTableDefaultModel<E extends Object> extends JSTableModel<List<E>>
 			this.removeRow(i);
 		}
 
-		this.orginal.clear();
+		if (this.orginal != null)
+			this.orginal.clear();
 	}
 
 	/*
@@ -361,16 +363,16 @@ public class JSTableDefaultModel<E extends Object> extends JSTableModel<List<E>>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int onRetrieve() {
-		try {		
-			
+	public int onRetrieve() throws Exception {
+		try {
+
+			this.removeTableModelListener(this);
 			orginal = this.getTableModelLinster().onRetrieve();
-			
+
 			/**
 			 * 如果设置为插入空白行，则新增加的时候，直接插入一行空白
 			 */
-			if(this.isRetrieveWithEmptyRow())
-			{
+			if (this.isRetrieveWithEmptyRow()) {
 				Object[] createNew = this.createNew();
 				int findColumn = this.findColumn(JSTableColumn.COLUMN_ORIGINAL);
 				createNew[findColumn] = null;
@@ -388,12 +390,9 @@ public class JSTableDefaultModel<E extends Object> extends JSTableModel<List<E>>
 						if (JSTableColumn.COLUMN_ORIGINAL.equals(colName)) {
 							datas[i] = entity;
 						} else {
-							if (null == colName || colName.length() <= 0)
-							{
+							if (null == colName || colName.length() <= 0) {
 								datas[i] = null;
-							}
-							else 
-							{
+							} else {
 								Field field = getCls().getDeclaredField(colName);
 								field.setAccessible(true);
 								datas[i] = field.get(entity);
@@ -403,14 +402,73 @@ public class JSTableDefaultModel<E extends Object> extends JSTableModel<List<E>>
 
 					addRow(datas);
 				}
-				
+
 				return orginal.size();
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;
+		} finally {
+			this.addTableModelListener(this);
 		}
 		return 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean onDelete(int moduleRow) throws Exception {
+		int findColumn = this.findColumn(JSTableColumn.COLUMN_ORIGINAL);
+		if (findColumn < 0)
+			return false;
+
+		Object entity = this.getValueAt(moduleRow, findColumn);
+		if (entity == null)
+			return false;
+
+		if (this.modifies.contains(entity)) {
+			this.deletes.add((E) entity);
+			this.modifies.remove(entity);
+		} else if (this.creates.contains(entity)) {
+			this.creates.remove(entity);
+		} else {
+			this.deletes.add((E) entity);
+		}
+
+		this.removeRow(moduleRow);
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean onInsert(int moduleRow) throws Exception {
+		Object[] datas = createNew();
+
+		int findColumn = this.findColumn(JSTableColumn.COLUMN_ORIGINAL);
+		this.creates.add((E) datas[findColumn]);
+		this.insertRow(moduleRow, datas);
+
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean onAppend() throws Exception {
+		Object[] datas = createNew();
+
+		int findColumn = this.findColumn(JSTableColumn.COLUMN_ORIGINAL);
+		this.creates.add((E) datas[findColumn]);
+		this.addRow(datas);
+
+		return true;
 	}
 }

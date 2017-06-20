@@ -104,30 +104,6 @@ public abstract class JSTableModelAdapter<E> implements JSTableModelLinster<E> {
 
 	/**
 	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean delete(JSTableModelEvent event) throws Exception {
-		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean append(JSTableModelEvent event) throws Exception {
-		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean insert(JSTableModelEvent event) throws Exception {
-		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
 	 * @throws ParseException 
 	 */
 	public Object getDataTranstor(JSTableColumn col, Object value, Class<?> targetCls) throws ParseException {
