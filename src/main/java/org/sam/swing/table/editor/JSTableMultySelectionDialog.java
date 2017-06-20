@@ -25,7 +25,7 @@ import org.sam.swing.table.JSTableBuilder;
 import org.sam.swing.table.JSTableColumn;
 import org.sam.swing.table.JSTableColumnModel;
 import org.sam.swing.table.JSTableModel;
-import org.sam.swing.table.defaultImpl.JSDefaultTableBuilderImpl;
+import org.sam.swing.table.defaultImpl.JSTableDefaultBuilderImpl;
 import org.sam.swing.table.view.JSHibernateTableColumnMappingAbstract;
 import org.sam.swing.table.view.JSTableColumnMapping;
 
@@ -357,7 +357,7 @@ public class JSTableMultySelectionDialog extends JSDialog implements ActionListe
 		if (columns == null || columns.length <= 0)
 			return;
 		
-		JSTableBuilder<?> builder = new JSDefaultTableBuilderImpl<>(colMapping.getEntityClss(), columns);
+		JSTableBuilder<?> builder = new JSTableDefaultBuilderImpl<>(colMapping.getEntityClss(), columns);
 		
 		try
 		{

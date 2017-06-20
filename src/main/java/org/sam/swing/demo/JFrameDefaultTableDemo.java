@@ -14,7 +14,8 @@ import org.sam.swing.table.JSTableColumn;
 import org.sam.swing.table.JSTableColumnModel;
 import org.sam.swing.table.JSTableModel;
 import org.sam.swing.table.JSTableModelAdapter;
-import org.sam.swing.table.defaultImpl.JSDefaultTableBuilderImpl;
+import org.sam.swing.table.JSTableModelEvent;
+import org.sam.swing.table.defaultImpl.JSTableDefaultBuilderImpl;
 
 /**
  * table表格方法
@@ -69,7 +70,7 @@ public class JFrameDefaultTableDemo extends JFrame {
 		
 		try
 		{
-			JSTableBuilder<List<TestEntity>> builder = new JSDefaultTableBuilderImpl<>(TestEntity.class , col0);
+			JSTableBuilder<List<TestEntity>> builder = new JSTableDefaultBuilderImpl<>(TestEntity.class , col0);
 			colModel = builder.buildTableColumnModel();
 			tableModel = builder.buildTableModel();
 			table = new JSTable(tableModel , colModel);
@@ -93,6 +94,7 @@ public class JFrameDefaultTableDemo extends JFrame {
 					}
 					return result;
 				}
+				
 			});
 			
 			panel.add(new JScrollPane( table ), BorderLayout.CENTER);

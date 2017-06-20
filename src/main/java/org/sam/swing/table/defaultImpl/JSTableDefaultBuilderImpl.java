@@ -13,7 +13,7 @@ import org.sam.swing.table.JSTableModel;
  *
  * @param <E>
  */
-public class JSDefaultTableBuilderImpl<E> implements JSTableBuilder<List<E>> {
+public class JSTableDefaultBuilderImpl<E> implements JSTableBuilder<List<E>> {
 
 	/**
 	 * 当前的column列表
@@ -43,7 +43,7 @@ public class JSDefaultTableBuilderImpl<E> implements JSTableBuilder<List<E>> {
 	 * 带有列信息的构造函数
 	 * @param cols
 	 */
-	public JSDefaultTableBuilderImpl(Class<E> cls,JSTableColumn... cols)
+	public JSTableDefaultBuilderImpl(Class<E> cls,JSTableColumn... cols)
 	{
 		this.columns = cols;
 		this.cls = cls;
