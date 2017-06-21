@@ -3,6 +3,7 @@ package org.sam.swing.demo;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,9 +15,12 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JToolBar;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import org.jdesktop.swingx.table.DatePickerCellEditor;
 import org.sam.swing.resource.ResourceLoader;
 import org.sam.swing.table.JSTable;
 import org.sam.swing.table.JSTableBuilder;
@@ -25,6 +29,8 @@ import org.sam.swing.table.JSTableColumnModel;
 import org.sam.swing.table.JSTableModel;
 import org.sam.swing.table.defaultImpl.JSTableDefaultBuilderImpl;
 import org.sam.swing.table.defaultImpl.JSTableModelDefaultLinster;
+import org.sam.swing.table.editor.JSTableSpinnerEditor;
+import org.sam.swing.table.renderer.JSTableFormatRenderer;
 import org.sam.swing.table.renderer.JSTableRowNumberRenderer;
 
 /**
@@ -72,6 +78,9 @@ public class JFrameDefaultTableDemo extends JFrame {
 
 		DefaultTableCellRenderer renderC = new DefaultTableCellRenderer();
 		renderC.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+		
+		DefaultTableCellRenderer renderR = new DefaultTableCellRenderer();
+		renderR.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
 
 		JSTableColumn col0 = new JSTableColumn();
 		col0.setIdentifier("");
@@ -117,10 +126,36 @@ public class JFrameDefaultTableDemo extends JFrame {
 		DefaultCellEditor editorGender = new DefaultCellEditor(cbGender);
 		col3.setCellRenderer(renderC); // 居中显示
 		col3.setCellEditor(editorGender); // 普通的下拉列表框
+		
+		//以下是数字微调控件的示例
+		JSTableColumn col4 = new JSTableColumn();
+		col4.setIdentifier("age");
+		col4.setTitle("年龄");
+		col4.setHeaderValue("年龄");
+		col4.setModelIndex(4);
+		col4.setWidth(25);
+		col4.setMinWidth(25);
+		col4.setDefaultValue(1);
+		col4.setCellRenderer(renderR); // 右侧显示
+		//带有范围限定的
+		col4.setCellEditor(new JSTableSpinnerEditor(new JSpinner(new SpinnerNumberModel(1, 1, 255, 1))));
+		
+		//日期下拉控件
+		JSTableColumn col5 = new JSTableColumn();
+		col5.setIdentifier("birthday");
+		col5.setTitle("生日");
+		col5.setHeaderValue("生日");
+		col5.setModelIndex(5);
+		col5.setWidth(85);
+		col5.setMinWidth(85);
+		col5.setDefaultValue(1);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		col5.setCellRenderer(new JSTableFormatRenderer(dateFormat , "0000-00-00"));
+		col5.setCellEditor(new DatePickerCellEditor(dateFormat));
 
 		try {
 			JSTableBuilder<List<TestEntity>> builder = new JSTableDefaultBuilderImpl<>(TestEntity.class, col0, col1,
-					col2, col3);
+					col2, col3,col4,col5);
 			colModel = builder.buildTableColumnModel();
 			tableModel = builder.buildTableModel();
 			table = new JSTable(tableModel, colModel);
@@ -138,7 +173,8 @@ public class JFrameDefaultTableDemo extends JFrame {
 						entity.setCode("" + i);
 						entity.setName("name:" + i);
 						entity.setGender(i % 3 == 0 ? "男" : (i % 2 == 1 ? "女" : null));
-
+						entity.setAge((i + 1) % 255);
+						entity.setRole(i % 3 == 0 ? 0 : (i % 2 == 1 ? 1 : null));
 						result.add(entity);
 					}
 					return result;

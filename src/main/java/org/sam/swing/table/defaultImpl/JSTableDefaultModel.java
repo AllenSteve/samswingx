@@ -9,7 +9,6 @@ import javax.swing.event.TableModelListener;
 
 import org.sam.swing.table.JSTableColumn;
 import org.sam.swing.table.JSTableModel;
-import org.sam.swing.table.JSTableModelAdapter;
 import org.sam.swing.table.JSTableModelLinster;
 
 /**
@@ -57,7 +56,6 @@ public class JSTableDefaultModel<E extends Object> extends JSTableModel<List<E>>
 	public JSTableDefaultModel(Class<E> cls) {
 		super();
 		this.cls = cls;
-		this.addTableModelListener(this);
 	}
 
 	/**
@@ -69,8 +67,7 @@ public class JSTableDefaultModel<E extends Object> extends JSTableModel<List<E>>
 	public JSTableModelLinster<List<E>> getTableModelLinster() {
 
 		if (super.getTableModelLinster() == null)
-			this.setTableModelLinster(new JSTableModelAdapter<List<E>>() {
-			});
+			this.setTableModelLinster(new JSTableModelDefaultLinster<E>(this));
 		return super.getTableModelLinster();
 	}
 
