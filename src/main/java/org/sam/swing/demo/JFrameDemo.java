@@ -2,6 +2,7 @@ package org.sam.swing.demo;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import org.jdesktop.swingx.JXFrame;
+import org.jdesktop.swingx.JXRadioGroup;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 
@@ -59,6 +61,11 @@ public class JFrameDemo extends JXFrame {
 	private JPanel mainPane;
 	
 	/**
+	 * 单选按钮组控件
+	 */
+	private JXRadioGroup<String> rgGroup;
+	
+	/**
 	 * 初始化所有的控件信息
 	 */
 	protected void initCompents()
@@ -90,8 +97,12 @@ public class JFrameDemo extends JXFrame {
 		tpc.add(aboutPane);
 		
 		//套入分隔条
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT , new JScrollPane(tpc) , mainPane = new JPanel());
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT , new JScrollPane(tpc) , mainPane = new JPanel(new BorderLayout()));
 		
+		//加入一个单选按钮组
+		rgGroup = new JXRadioGroup<>(new String[]{"已婚" , "未婚" , "离异" , "丧偶"});
+		rgGroup.setLayout(new BoxLayout(rgGroup, BoxLayout.Y_AXIS));
+		mainPane.add(rgGroup,BorderLayout.CENTER);
 		this.add(splitPane, BorderLayout.CENTER);
 	}
 }

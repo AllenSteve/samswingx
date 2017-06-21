@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
@@ -29,8 +31,10 @@ import org.sam.swing.table.JSTableColumnModel;
 import org.sam.swing.table.JSTableModel;
 import org.sam.swing.table.defaultImpl.JSTableDefaultBuilderImpl;
 import org.sam.swing.table.defaultImpl.JSTableModelDefaultLinster;
+import org.sam.swing.table.editor.JSTableRadioButtonGroupEditor;
 import org.sam.swing.table.editor.JSTableSpinnerEditor;
 import org.sam.swing.table.renderer.JSTableFormatRenderer;
+import org.sam.swing.table.renderer.JSTableRadioButtonGroupRenderer;
 import org.sam.swing.table.renderer.JSTableRowNumberRenderer;
 
 /**
@@ -148,14 +152,32 @@ public class JFrameDefaultTableDemo extends JFrame {
 		col5.setModelIndex(5);
 		col5.setWidth(85);
 		col5.setMinWidth(85);
-		col5.setDefaultValue(1);
+		col5.setDefaultValue(null);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		col5.setCellRenderer(new JSTableFormatRenderer(dateFormat , "0000-00-00"));
 		col5.setCellEditor(new DatePickerCellEditor(dateFormat));
+		
+		//单选按钮
+		JSTableColumn col6 = new JSTableColumn();
+		col6.setIdentifier("role");
+		col6.setTitle("角色");
+		col6.setHeaderValue("角色");
+		col6.setModelIndex(6);
+		col6.setWidth(85);
+		col6.setMinWidth(85);
+		col6.setDefaultValue(1);
+		
+		Map<Integer,String> roles = new LinkedHashMap<>();
+		roles.put(0, "管理员");
+		roles.put(1, "经理");
+		roles.put(2, "员工");
+		
+		col6.setCellRenderer(new JSTableRadioButtonGroupRenderer<Integer,String>(roles));
+		col6.setCellEditor(new JSTableRadioButtonGroupEditor<Integer,String>(roles));
 
 		try {
 			JSTableBuilder<List<TestEntity>> builder = new JSTableDefaultBuilderImpl<>(TestEntity.class, col0, col1,
-					col2, col3,col4,col5);
+					col2, col3,col4,col5,col6);
 			colModel = builder.buildTableColumnModel();
 			tableModel = builder.buildTableModel();
 			table = new JSTable(tableModel, colModel);
@@ -174,7 +196,7 @@ public class JFrameDefaultTableDemo extends JFrame {
 						entity.setName("name:" + i);
 						entity.setGender(i % 3 == 0 ? "男" : (i % 2 == 1 ? "女" : null));
 						entity.setAge((i + 1) % 255);
-						entity.setRole(i % 3 == 0 ? 0 : (i % 2 == 1 ? 1 : null));
+						entity.setRole(i % 3 == 0 ? 0 : (i % 2 == 1 ? 1 : 2));
 						result.add(entity);
 					}
 					return result;

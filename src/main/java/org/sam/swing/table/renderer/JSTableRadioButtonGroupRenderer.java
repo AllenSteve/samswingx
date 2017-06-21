@@ -8,7 +8,7 @@ import javax.swing.CellRendererPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import org.sam.swing.JSRadiobuttonGroup;
+import org.sam.swing.JSRadioButtonGroup;
 
 
 /**
@@ -17,17 +17,14 @@ import org.sam.swing.JSRadiobuttonGroup;
  * @author sam
  *
  */
-public class JSTableRadiobuttonGroupRenderer extends CellRendererPane implements TableCellRenderer {
+public class JSTableRadioButtonGroupRenderer<V,T> extends CellRendererPane implements TableCellRenderer {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4045115531523620178L;
 
 	/**
 	 * 单选控件组
 	 */
-	private JSRadiobuttonGroup radiobuttons;
+	private JSRadioButtonGroup<V,T> radiobuttons;
 
 	/**
 	 * 未选中的时候背景颜色
@@ -42,13 +39,13 @@ public class JSTableRadiobuttonGroupRenderer extends CellRendererPane implements
 	/**
 	 * 绑定的数据字典
 	 */
-	private Map<Object, String> map;
+	private Map<V,T> map;
 	
 	/**
 	 * 绑定的数据字典
 	 * @return
 	 */
-	public Map<Object, String> getMap() {
+	public Map<V,T> getMap() {
 		return map;
 	}
 
@@ -56,7 +53,7 @@ public class JSTableRadiobuttonGroupRenderer extends CellRendererPane implements
 	 * 绑定的数据字典
 	 * @param map
 	 */
-	public void setMap(Map<Object, String> map) {
+	public void setMap(Map<V,T> map) {
 		this.map = map;
 	}
 
@@ -94,25 +91,52 @@ public class JSTableRadiobuttonGroupRenderer extends CellRendererPane implements
 	 * @param defaultValue
 	 *            默认值
 	 */
-	public JSTableRadiobuttonGroupRenderer(Map<Object, String> map, Object defaultValue) {
-		if (map == null)
-			throw new IllegalArgumentException();
+	public JSTableRadioButtonGroupRenderer(Map<V,T> map, V defaultValue) {
+		this(map);
+		radiobuttons.setSelectedValue(defaultValue);
+	}
+	
+	/**
+	 * 带数据字典，默认选中值，控件方向的构造函数
+	 * @param map
+	 *            数据字典
+	 * @param defaultValue
+	 *            默认值
+	 * @param axis
+	 *            0 x方向；1 y方向
+	 * @see javax.swing.BoxLayout.X_AXIS
+	 * @see javax.swing.BoxLayout.Y_AXIS
+	 */
+	public JSTableRadioButtonGroupRenderer(Map<V,T> map, V defaultValue,int axis) {
+		this(map);
+		radiobuttons.setSelectedValue(defaultValue);
+		radiobuttons.setLayoutAxis(axis);
+	}
+	
+	/**
+	 * 只带数据字典的构造函数
+	 * @param map
+	 */
+	public JSTableRadioButtonGroupRenderer(Map<V,T> map)
+	{
+		super();
 		this.map = map;
-		this.radiobuttons = new JSRadiobuttonGroup(map, defaultValue);
+		this.radiobuttons = new JSRadioButtonGroup<>(map);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		radiobuttons.setSelectedValue(value);
+		radiobuttons.setSelectedValue((V)value);
 
 		JTable.DropLocation dropLocation = table.getDropLocation();
 		if (dropLocation != null && !dropLocation.isInsertRow() && !dropLocation.isInsertColumn()
 				&& dropLocation.getRow() == row && dropLocation.getColumn() == column) {
-
+			
 			isSelected = true;
 		}
 
