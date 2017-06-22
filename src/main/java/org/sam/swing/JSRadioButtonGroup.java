@@ -162,6 +162,7 @@ public class JSRadioButtonGroup<V, T> extends JPanel {
 		if (actionHandler == null) {
 			actionHandler = new ActionSelectionListener();
 		}
+		button.setBackground(null); //设置了这个属性，背景色就会变成透明，不解
 		button.addActionListener(actionHandler);
 		button.addItemListener(actionHandler);
 	}

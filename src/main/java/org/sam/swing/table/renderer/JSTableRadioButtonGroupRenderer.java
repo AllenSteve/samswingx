@@ -146,9 +146,8 @@ public class JSTableRadioButtonGroupRenderer<V,T> extends CellRendererPane imple
 			this.radiobuttons.setForeground(table.getSelectionForeground());
 			this.radiobuttons.setBackground(table.getSelectionBackground());
 		} else {
-			Color background = unselectedBackground != null ? unselectedBackground : table.getBackground();
 			super.setForeground(unselectedForeground != null ? unselectedForeground : table.getForeground());
-			super.setBackground(background);
+			super.setBackground(unselectedBackground != null ? unselectedBackground : table.getBackground());
 			this.radiobuttons.setForeground(this.getForeground());
 			this.radiobuttons.setBackground(this.getBackground());
 		}

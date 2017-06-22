@@ -23,10 +23,6 @@ public class App
     	frm.setSize(1024 , 768);
     	frm.setLocationRelativeTo(null); //在屏幕上居中
         frm.setVisible(true);
-        
-        JFrameDemo frmDemo = new JFrameDemo();
-        frmDemo.setSize(1024 , 768);
-        frmDemo.setLocationRelativeTo(null); //在屏幕上居中
-        frmDemo.setVisible(true);
+       
     }
 }

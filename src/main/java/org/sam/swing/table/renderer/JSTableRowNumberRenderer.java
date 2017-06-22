@@ -6,7 +6,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- * 
+ * 行号渲染器
  * @author sam
  *
  */
@@ -26,7 +26,7 @@ public class JSTableRowNumberRenderer extends DefaultTableCellRenderer {
 		
 		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		
-		this.setText(String.valueOf(row));
+		this.setText(String.valueOf(row + 1));
 		return this;
 	}
 

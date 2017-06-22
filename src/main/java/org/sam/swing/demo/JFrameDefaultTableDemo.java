@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -31,8 +32,10 @@ import org.sam.swing.table.JSTableColumnModel;
 import org.sam.swing.table.JSTableModel;
 import org.sam.swing.table.defaultImpl.JSTableDefaultBuilderImpl;
 import org.sam.swing.table.defaultImpl.JSTableModelDefaultLinster;
+import org.sam.swing.table.editor.JSTableCheckboxEditor;
 import org.sam.swing.table.editor.JSTableRadioButtonGroupEditor;
 import org.sam.swing.table.editor.JSTableSpinnerEditor;
+import org.sam.swing.table.renderer.JSTableCheckboxRenderer;
 import org.sam.swing.table.renderer.JSTableFormatRenderer;
 import org.sam.swing.table.renderer.JSTableRadioButtonGroupRenderer;
 import org.sam.swing.table.renderer.JSTableRowNumberRenderer;
@@ -163,8 +166,8 @@ public class JFrameDefaultTableDemo extends JFrame {
 		col6.setTitle("角色");
 		col6.setHeaderValue("角色");
 		col6.setModelIndex(6);
-		col6.setWidth(85);
-		col6.setMinWidth(85);
+		col6.setWidth(175);
+		col6.setMinWidth(175);
 		col6.setDefaultValue(1);
 		
 		Map<Integer,String> roles = new LinkedHashMap<>();
@@ -174,10 +177,25 @@ public class JFrameDefaultTableDemo extends JFrame {
 		
 		col6.setCellRenderer(new JSTableRadioButtonGroupRenderer<Integer,String>(roles));
 		col6.setCellEditor(new JSTableRadioButtonGroupEditor<Integer,String>(roles));
+		
+		JSTableColumn col7 = new JSTableColumn();
+		col7.setIdentifier("onDuty");
+		col7.setTitle("在职状态");
+		col7.setHeaderValue("在职状态");
+		col7.setModelIndex(7);
+		col7.setWidth(15);
+		col7.setMinWidth(15);
+		col7.setDefaultValue(false);
+		JSTableCheckboxRenderer jsTableCheckboxRenderer = new JSTableCheckboxRenderer();
+		jsTableCheckboxRenderer.setHorizontalAlignment(JSTableCheckboxRenderer.CENTER);
+		col7.setCellRenderer(jsTableCheckboxRenderer);
+		JCheckBox jCheckBox = new JCheckBox();
+		jCheckBox.setHorizontalAlignment(JCheckBox.CENTER);
+		col7.setCellEditor(new JSTableCheckboxEditor(jCheckBox));
 
 		try {
 			JSTableBuilder<List<TestEntity>> builder = new JSTableDefaultBuilderImpl<>(TestEntity.class, col0, col1,
-					col2, col3,col4,col5,col6);
+					col2, col3,col4,col5,col6,col7);
 			colModel = builder.buildTableColumnModel();
 			tableModel = builder.buildTableModel();
 			table = new JSTable(tableModel, colModel);
@@ -197,6 +215,7 @@ public class JFrameDefaultTableDemo extends JFrame {
 						entity.setGender(i % 3 == 0 ? "男" : (i % 2 == 1 ? "女" : null));
 						entity.setAge((i + 1) % 255);
 						entity.setRole(i % 3 == 0 ? 0 : (i % 2 == 1 ? 1 : 2));
+						entity.setOnDuty(i % 2 == 0);
 						result.add(entity);
 					}
 					return result;

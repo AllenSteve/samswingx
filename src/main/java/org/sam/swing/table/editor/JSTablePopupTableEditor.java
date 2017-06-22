@@ -4,9 +4,11 @@ import java.awt.Component;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JTable;
+import javax.swing.JTree;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.table.TableCellEditor;
+import javax.swing.tree.TreeCellEditor;
 
 import org.jdesktop.swingx.JXTable;
 
@@ -15,7 +17,7 @@ import org.jdesktop.swingx.JXTable;
  * @author sam
  *
  */
-public class JSTablePopupTableEditor extends AbstractCellEditor implements TableCellEditor {
+public class JSTablePopupTableEditor extends AbstractCellEditor implements TableCellEditor,TreeCellEditor {
 	/**
 	 * 
 	 */
@@ -64,6 +66,13 @@ public class JSTablePopupTableEditor extends AbstractCellEditor implements Table
 		popup.show();
 		
 		return this.table;
+	}
+
+	@Override
+	public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded,
+			boolean leaf, int row) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
